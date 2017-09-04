@@ -1,0 +1,18 @@
+<!--{block return}-->
+<!--{if $this->adminsettings['syncpublish']['forwarding']}-->
+	<!--{if $this->isbind && $this->adminsettings['sysncpushback']['pushbackshare'] && in_array($_G['uid'], $this->adminsettings['sysncpushback']['pushbackshare_uids'])}-->
+		<a class="oshr" style="background:white url({$this->adminsettings['imgurl']}/icon_logo.png) no-repeat 5px 50%;" href="javascript:void((function(s,d,e,r,l,p,t,z,c,o) {var f='http://service.weibo.com/share/share.php?appkey={$this->adminsettings['appkey']}',u=z||d.location,p=['&amp;url=',e(u),'&amp;title=',e(t||d.title),'&amp;ralateUid=',o||'','&amp;sourceUrl=',e(l),'&amp;content=',c||'{CHARSET}','&amp;pic=',e(p||'')].join('');function a(){if(!window.open([f,p].join(''),'mb', ['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width- 440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0);}else{a();}}) (screen,document,encodeURIComponent,'','','{$pic_path}','{$title}','','{CHARSET}', '{$this->usersettings['defaultsinauid']}'));">{lang sina_login:share_to_sina}</a>
+	<!--{else}-->
+		<a class="oshr" style="background:white url({$this->adminsettings['imgurl']}/icon_logo.png) no-repeat 5px 50%;" href="javascript:void((function(s,d,e,r,l,p,t,z,c,o) {var f='http://service.weibo.com/share/share.php?appkey={$this->adminsettings['appkey']}',u=z||d.location,p=['&amp;url=',e(u),'&amp;title=',e(t||d.title),'&amp;ralateUid=',o||'','&amp;sourceUrl=',e(l),'&amp;content=',c||'{CHARSET}','&amp;pic=',e(p||'')].join('');function a(){if(!window.open([f,p].join(''),'mb', ['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width- 440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0);}else{a();}}) (screen,document,encodeURIComponent,'','','{$pic_path}','{$title}','','{CHARSET}', '{$this->usersettings['defaultsinauid']}'));">{lang sina_login:share_to_sina}</a>
+	<!--{/if}-->
+<!--{/if}-->
+<!--{if $syncurl}-->
+<script type="text/javascript">
+<!--{loop $syncdata $key $rs}-->
+var x<!--{$key}--> = new Ajax();
+var data<!--{$key}--> = '<!--{$rs}-->';
+x<!--{$key}-->.post('{$syncurl}', data<!--{$key}-->, function(msg) {});
+<!--{/loop}-->
+</script>
+<!--{/if}-->
+<!--{/block}-->

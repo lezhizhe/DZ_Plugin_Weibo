@@ -1,0 +1,11 @@
+<!--{block return}-->
+<!--{if $syncurl}-->
+<script type="text/javascript">
+<!--{loop $syncdata $key $rs}-->
+var x<!--{$key}--> = new Ajax();
+var data<!--{$key}--> = '<!--{$rs}-->';
+x<!--{$key}-->.post('{$syncurl}', data<!--{$key}-->, function(msg) {});
+<!--{/loop}-->
+</script>
+<!--{/if}-->
+<!--{/block}-->

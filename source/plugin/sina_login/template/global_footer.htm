@@ -1,0 +1,11 @@
+<!--{block return}-->
+	<!--{if $_G['cookie'][$this->pluginid.'_shareregister_1']}-->
+		<script type="text/javascript" reload="1">
+		showWindow('sharebinding', 'plugin.php?id=sina_login:index&operation=sharebinding&type=register&sina_uid=<!--{$sina_uid}-->', 'get', 1, {'cover':1});
+		</script>
+	<!--{elseif $_G['cookie'][$this->pluginid.'_sharebind']}-->
+		<script type="text/javascript" reload="1">
+		showWindow('sharebinding', 'plugin.php?id=sina_login:index&operation=sharebinding&type=bind&sina_uid=<!--{$sina_uid}-->', 'get', 1, {'cover':1});
+		</script>
+	<!--{/if}-->
+<!--{/block}-->

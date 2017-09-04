@@ -1,0 +1,19 @@
+<!--{block return}-->
+<style type="text/css">
+.sina_focus {
+}
+</style>
+<script language="javascript">
+var sina_chart = $('chart');
+for(var i=0; sina_chart.childNodes.length; i++) {
+	if(sina_chart.childNodes[i].nodeName == 'P' && sina_chart.childNodes[i].getAttribute('class') == 'chart z') {
+		i++;
+		break;
+	}
+}
+var p = document.createElement('p');
+p.className = 'sina_focus';
+p.innerHTML = '<iframe style="float:left;padding-left:10px;" scrolling="no" border="0" width="{$this->adminsettings[weibofollow][focus_width]}" height="24" style=" padding:4px 0 0 0" class="z" frameborder="0" allowtransparency="true"  src="http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width={$this->adminsettings[weibofollow][focus_width]}&height=22&uid={$this->adminsettings[weibofollow][officialuid]}&style=<!--{$this->adminsettings[weibofollow][focus_style]}-->&btn=<!--{if $this->adminsettings[weibofollow][focus_color]}-->red<!--{else}-->light<!--{/if}-->&dpc=1"></iframe>';
+sina_chart.insertBefore(p,sina_chart.childNodes[i]);
+</script>
+<!--{/block}-->

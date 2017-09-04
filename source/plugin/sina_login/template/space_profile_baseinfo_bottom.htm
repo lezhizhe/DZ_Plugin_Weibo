@@ -1,0 +1,14 @@
+<!--{block return}-->
+<!--{if $sinausers}-->
+<div class="pbm mbm bbda cl">
+	<h2 class="mbn">{lang sina_login:sina_user}</h2>
+	<p class="md_ctrl">
+	<!--{loop $sinausers $sinauser}-->
+		<a href="http://weibo.com/u/{$sinauser['sina_uid']}" target="_blank">
+		<img border="0" src="http://service.t.sina.com.cn/widget/qmd/{$sinauser['sina_uid']}/sdfds/1.png"/>
+		</a>
+	<!--{/loop}-->
+	</p>
+</div>
+<!--{/if}-->
+<!--{/block}-->

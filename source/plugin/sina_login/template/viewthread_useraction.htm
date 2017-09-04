@@ -1,0 +1,7 @@
+<!--{block return}-->
+	<!--{if $this->isbind && $this->adminsettings['sysncpushback']['pushbackshare'] && in_array($_G['uid'], $this->adminsettings['sysncpushback']['pushbackshare_uids'])}-->
+		<a href="javascript:showWindow('sina_repost','plugin.php?id={$this->pluginid}:index&operation=share&tid={$thread['tid']}&do=new');"><i><img src="{$this->adminsettings['imgurl']}/icon_logo.png">{lang sina_login:share_to_sina}</i></a>
+	<!--{else}-->
+		<a href="javascript:void((function(s,d,e,r,l,p,t,z,c,o) {var f='http://service.weibo.com/share/share.php?appkey={$this->adminsettings['appkey']}',u=z||d.location,p=['&url=',e(u),'&title=',e(t||d.title),'&ralateUid=',o||'','&sourceUrl=',e(l),'&content=',c||'{CHARSET}','&pic=',e(p||'')].join('');function a(){if(!window.open([f,p].join(''),'mb', ['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width- 440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');}; if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0);}else{a();}}) (screen,document,encodeURIComponent,'','','{$pic_path}','{$message}','','{CHARSET}', '{$this->usersettings['defaultsinauid']}'));" onclick="setTimeout('forstat()', 0);"><i><img src="{$this->adminsettings['imgurl']}/icon_logo.png">{lang sina_login:share_to_sina}</i></a>
+	<!--{/if}-->
+<!--{/block}-->

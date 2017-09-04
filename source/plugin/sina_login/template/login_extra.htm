@@ -1,0 +1,15 @@
+<!--{block return}-->
+<!--{if $_G['cookie']['sina_'.$this->pluginid]}-->
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+	<p>
+	<img src="{$this->adminsettings['imgurl']}/sina_logo_1.png" alt="" style="margin-bottom:-3px;">
+	<a href="member.php?mod={$_G['setting']['regname']}" class="xi2 xw1">{lang sina_login:perfect_user}</a>|<a href="member.php?mod=logging&action=login" class="xi2 xw1">{lang sina_login:bind_to_user}</a>
+	</p>
+</div>
+<!--{elseif in_array('headerlogin', $this->adminsettings['showoption'])}-->
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+<p><a href="{$this->adminsettings['initurl']}"><img src="{$this->adminsettings['imgurl']}/weibo_login.png" alt="{lang sina_login:sina_weibo_login}"></a></p>
+<p class="hm xg1" style="padding-top: 2px;">{lang sina_login:one_step_then_begin}</p>
+</div>
+<!--{/if}-->
+<!--{/block}-->

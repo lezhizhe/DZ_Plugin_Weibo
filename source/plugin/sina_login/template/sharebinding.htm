@@ -1,0 +1,36 @@
+<!--{template common/header}-->
+<div>
+	<h3 class="flb" style="cursor:move;"> 
+		<em>{lang sina_login:share_to_sina_weibo}</em>
+		<span><a title="关闭" onclick="hideWindow('sharebinding', 0, 1);" class="flbc" href="javascript:;">关闭</a></span>
+	</h3>
+</div>
+<div style="width:350px;padding:10px;">
+	<p><textarea id="sina_sharebinding_content" style="width:330px;height:100px;"><!--{$this->config['shareoption']['sharecontent']}--></textarea></p>
+	<p style="padding:10px;">
+		<button type="submit" class="pn pnc" style="float:right;" value="submit" onclick="sina_sharebinding();">
+			<strong>{lang sina_login:share_to_sina_weibo}</strong>
+		</button>
+	</p>
+	<!--{if $this->config['shareoption']['sharepic']}-->
+	<p><img src="<!--{$this->config['shareoption']['sharepic']}-->" width="200" height="200"></a></p>
+	<!--{/if}-->
+	<br>
+</div>
+<script type="text/javascript">
+function sina_sharebinding() {
+	var str = $('sina_sharebinding_content').value;
+	str = encodeURIComponent(str);
+	var data = 'type=<!--{$type}-->&sina_uid=<!--{$sina_uid}-->&content=' + str + '&weibo_repost=true&formhash=<!--{FORMHASH}-->';
+	var x = new Ajax();
+	x.post('<!--{$url}-->', data, function(msg){
+		if(msg == 'ok') {
+			showDialog('{lang sina_login:share_succeed}', 'right');
+		} else {
+			showDialog('{lang sina_login:share_failed}', 'alert');
+		}
+	});	
+	hideWindow('sharebinding', 0, 1);
+}
+</script>
+<!--{template common/footer}-->

@@ -1,0 +1,173 @@
+<!--{template common/header}-->
+	<h3 class="flb">
+		<em id="return_k_sina_weiboshare">{lang sina_login:share_to_sina_weibo}</em>
+		<span><a href="javascript:void(0);" onclick="hideWindow('sina_repost');" class="flbc" title="{lang close}">{lang close}</a></span>
+	</h3>
+		<input type="hidden" name="sina_attach_image" id="sina_attach_image" value="" />
+		<div class="c" style="padding: 5px 15px;">
+			<p class="cl">
+				<span class="y xg1" id="txtlength">{lang sina_login:share_tip1}</span>
+				{lang sina_login:share_weibo_content}
+			</p>
+			<textarea name="sina_reason" id="sina_reason" class="pt mtn" style="padding:0;margin:0;width:470px;height:80px;font-size:12px;"><!--{$message}--></textarea>
+		</div>
+		<div class="ec cl">
+		<div id="sina_connect_reason_tip" style="padding-left:15px;color:red;display:none;"></div>
+		</div>
+	<!--{if $thread['images']}-->
+		<div class="ec cl" id="sina_share_picture_title">{lang sina_login:share_weibo_pic}</div>
+		<div class="c" style="padding: 0 15px;display: block;" id="share_picture_content">
+			<div id="sina_share_picture_list">
+			<!--{loop $thread['images'] $img}-->
+				<div id="box_<!--{$img['aid']}-->" class="share_picture_box">
+					<div class="badge" id="<!--{$img['aid']}-->" onclick="sina_connect_share_picture_select(this.id);"></div>
+					<a href="javascript:void(0);"><img class="share_picute_img" width="100" height="100" src="<!--{$img['thumb']}-->" id="sina_connect_share_picture_<!--{$img['aid']}-->" rel="<!--{$img['path']}-->" /></a>
+				</div>
+			<!--{/loop}-->	
+			</div>
+		</div>
+	<!--{/if}-->
+		<div class="ec cl" style="padding: 5px 15px; text-align: right; clear: both;"></div>
+		<p class="o pns">
+			<button type="submit" name="sina_connect_share_button" id="sina_connect_share_button" class="pn pnc" value="true" onclick="return sina_connect_share_submit();"><strong>{lang sina_login:share_weibo_button}</strong></button>
+		</p>
+	<script type="text/javascript" reload="1">
+	function sina_connect_share_picture_select(sel_id) {
+		var img_list = [<!--{$aids}-->];
+		var obj = $('box_' + sel_id);
+		var attach = $('sina_attach_image');
+		if(sina_hasClass(obj, 'select')) {
+			sina_removeClass(obj, 'select');
+			attach.value = '';
+		} else {
+			for (var i = 0; i < img_list.length; i++) {
+				$('box_' + img_list[i]).className = "share_picture_box";
+			}
+			attach.value = $('sina_connect_share_picture_' + sel_id).getAttribute('rel');
+			sina_addClass(obj, 'select');
+		}
+	}
+
+	function sina_hasClass(ele, cls) {
+		return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+	}
+
+	function sina_addClass(ele, cls) {
+		if (!this.sina_hasClass(ele, cls)) ele.className += " " + cls;
+	}
+
+	function sina_removeClass(ele, cls) {
+		if (sina_hasClass(ele, cls)) {
+			var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+			ele.className = ele.className.replace(reg, ' ');
+		}
+	}
+
+	function sina_connect_trim(str) {
+		str = str.replace(/^\s+/, '');
+		for (var i = str.length - 1; i >= 0; i--) {
+			if (/\S/.test(str.charAt(i))) {
+				str = str.substring(0, i + 1);
+				break;
+			}
+		}
+		return str;
+	}
+
+	function sina_isChinese(str){
+		var reCh=/[u00-uff]/;
+		return !reCh.test(str);
+	}
+
+	function sina_connect_smart_length(str) {
+		var strlen = 0;
+		var charCode = -1;
+		for(var i = 0; i < str.length; i++) {
+			charCode = str.charCodeAt(i);
+			if(charCode >= 0 && charCode <= 128) {
+				strlen = strlen + 0.5;
+			}else{
+				strlen = strlen + 1;
+			}
+		}
+		return Math.ceil(strlen);
+	}
+
+	function connect_smart_cut(str, maxlen) {
+		if (sina_connect_smart_length(str) <= maxlen) {
+			return str;
+		} else {
+			for (var i = 0, l = str.length; i < l; i++) {
+				var temp = str.substr(0, i);
+					if (sina_connect_smart_length(temp) >= maxlen) {
+					return temp;
+				}
+			}
+			return str;
+		}
+	}
+	function sina_connect_error_tip_true(obj, msg) {
+		$(obj).innerHTML = msg;
+		$(obj).style.display = "";
+	}
+
+	function sina_connect_error_tip() {
+		var str = $('sina_reason').value;
+		var sl = sina_connect_smart_length(str);
+		if (sl > 139) {
+			sina_connect_error_tip_true('sina_connect_reason_tip', '{lang sina_login:share_tip2}');
+			return false;
+		} else if (sl <= 0) {
+			sina_connect_error_tip_true('sina_connect_reason_tip', '{lang sina_login:share_tip3}');
+			return false;
+		} else {
+			$('sina_connect_reason_tip').style.display = "none";
+		}
+		return true;
+	}
+	function sina_connect_share_submit() {
+		if (!sina_connect_error_tip()) {
+			return false;
+		}
+		var str = $('sina_reason').value;
+		var attach = $('sina_attach_image').value;
+		sina_share_submit(str, attach);
+		return false;
+	}
+	function sina_share_submit(str, img) {
+		str = encodeURIComponent(str);
+		var data = 'sina_reason=' + str + '&sina_attach_image=' + img + '&weibo_repost=true&formhash=<!--{FORMHASH}-->&tid=<!--{$tid}-->';
+		var x = new Ajax();
+		x.post("<!--{$formurl}-->", data, function(msg){
+			if(msg == 'ok') {
+				showDialog('{lang sina_login:share_succeed}', 'right');
+			} else {
+				showDialog('{lang sina_login:share_failed}', 'alert');
+			}
+		});	
+		hideWindow('sina_repost', 0, 1);
+	}
+	function sina_connect_share_init() {
+		var connect_reason_default = $('sina_reason').value;
+		$('sina_checklen').innerHTML = 139 - sina_connect_smart_length(connect_reason_default);
+		sina_connect_error_tip();
+		<!--{if $thread['images']}-->
+		sina_connect_share_picture_select('<!--{$selectedaid}-->');
+		<!--{/if}-->
+		$('sina_reason').onkeyup = function() {
+			var str = $('sina_reason').value;
+			var sl = sina_connect_smart_length(str);
+			var l = 139 - sl;
+			if(l < 0) {
+				$('txtlength').innerHTML = '{lang sina_login:share_tip4}';
+				$('sina_checklen').innerHTML = sl-139;
+			} else {
+				$('txtlength').innerHTML = '{lang sina_login:share_tip5}';
+				$('sina_checklen').innerHTML = l;
+			}
+			sina_connect_error_tip();
+		}
+	}
+	sina_connect_share_init();    
+	</script>
+<!--{template common/footer}-->

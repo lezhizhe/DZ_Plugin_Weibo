@@ -1,0 +1,87 @@
+<!--{if empty($_G['sina_bind_user'])}-->
+<div class="mtw bm2 cl">
+	<div class="bm2_b bw0 hm" style="padding-top: 70px;">
+		<a href="<!--{eval echo sina_plugin_tools::get_rewrite_url('init');}-->"><img src="{$_G['siteurl']}/source/plugin/<!--{eval echo sina_plugin_tools::get_plugin_name();}-->/img/weibo_bind.png"></a>
+		<p class="mtn xg1">{lang sina_login:setting_tip1}</p>
+	</div>
+	{lang sina_login:setting_tip2}
+</div>
+<!--{else}-->
+{lang sina_login:setting_tip3}
+<div>
+	<form action="home.php?mod=spacecp&ac=plugin&id=<!--{eval echo sina_plugin_tools::get_plugin_name();}-->:setting" method="post" autocomplete="off">
+		<input type="hidden" name="formhash" value="{FORMHASH}">
+		<div style="margin-left:100px;">
+			<table cellspacing="0" cellpadding="0" class="tfm">
+				<tbody>
+				<!--{loop $_G['sina_bind_user'] $sinauser}-->
+				<tr>
+					<th class="pns">{lang sina_login:sina_user}:<a href="http://www.weibo.com/u/{$sinauser['sina_uid']}" target="_blank" class="xi2"><b>{$sinauser['profile']['screen_name']}</b></a>  
+					<a href="<!--{eval echo sina_plugin_tools::get_rewrite_url('cancel'.$sinauser['sina_uid']);}-->" class="xi2">{lang sina_login:oauth_cancel}</a> <!--{if !$sinauser['negative']}-->{lang sina_login:oauth_time_left_0}<!--{else}-->{lang sina_login:oauth_time_left_1}<!--{/if}--><!--{$sinauser['expire']}-->
+					<!--{if $sinauser['isexpired']}--><a href="<!--{eval echo sina_plugin_tools::get_rewrite_url('finit');}-->" class="xi2">{lang sina_login:oauth_extend}</a>{lang sina_login:oauth_extend_tip}<!--{/if}--></th>
+				</tr>
+				<!--{/loop}-->
+				<tr>
+					<th class="pns"><a href="<!--{eval echo sina_plugin_tools::get_rewrite_url('finit');}-->"><img src="{$_G['siteurl']}/source/plugin/<!--{eval echo sina_plugin_tools::get_plugin_name();}-->/img/weibo_bind.png"></a>  {lang sina_login:setting_bind_tip}</th>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+</div>
+<p class="pbm bbda xi1"></p>	
+	<table cellspacing="0" cellpadding="0" class="tfm">
+		<tbody>
+			<tr>
+				<th>{lang sina_login:setting_sync_tip}</th>
+				<td>
+				<!--{if in_array('threads', $_G['sina_admin_settings']['syncpublish']['option'])}-->
+					<label for="threads" style="margin-left:10px">
+					<input type="checkbox" id="threads" name="syncoption[]" class="pc" value="threads" <!--{if in_array('threads', $_G['sina_bind_user_settings']['sync'])}-->checked<!--{/if}-->>{lang sina_login:threads}</label>
+				<!--{/if}-->
+				<!--{if in_array('portal', $_G['sina_admin_settings']['syncpublish']['option'])}-->
+					<label for="portal" style="margin-left:10px">
+					<input type="checkbox" id="portal" name="syncoption[]" class="pc" value="portal" <!--{if in_array('portal', $_G['sina_bind_user_settings']['sync'])}-->checked<!--{/if}-->>{lang portal}</label>
+				<!--{/if}-->
+				<!--{if in_array('blog', $_G['sina_admin_settings']['syncpublish']['option'])}-->
+					<label for="blog" style="margin-left:10px">
+					<input type="checkbox" id="blog" name="syncoption[]" class="pc" value="blog" <!--{if in_array('blog', $_G['sina_bind_user_settings']['sync'])}-->checked<!--{/if}-->>{lang blog}</label>
+					<br><br>
+				<!--{/if}-->
+				<!--{if in_array('share', $_G['sina_admin_settings']['syncpublish']['option'])}-->
+					<label for="share" style="margin-left:10px">
+					<input type="checkbox" id="share" name="syncoption[]" class="pc" value="share" <!--{if in_array('share', $_G['sina_bind_user_settings']['sync'])}-->checked<!--{/if}-->>{lang share}</label>
+				<!--{/if}-->
+				<!--{if in_array('doing', $_G['sina_admin_settings']['syncpublish']['option'])}-->
+					<label for="doing" style="margin-left:10px">
+					<input type="checkbox" id="doing" name="syncoption[]" class="pc" value="doing" <!--{if in_array('doing', $_G['sina_bind_user_settings']['sync'])}-->checked<!--{/if}-->>{lang doing}</label>
+				<!--{/if}-->
+				<!--{if in_array('follow', $_G['sina_admin_settings']['syncpublish']['option'])}-->
+					<label for="follow" style="margin-left:10px">
+					<input type="checkbox" id="follow" name="syncoption[]" class="pc" value="follow" <!--{if in_array('follow', $_G['sina_bind_user_settings']['sync'])}-->checked<!--{/if}-->>{lang sina_login:follow}</label>
+				<!--{/if}-->
+				</td>
+			</tr>
+			<!--{if count($_G['sina_bind_user']) > 1}-->
+			<tr>
+				<th>{lang sina_login:setting_sina_default}</th>
+				<td>
+					<!--{loop $_G['sina_bind_user'] $sinauser}-->
+					<input type="radio" id="defaultsinauid{$sinauser['sina_uid']}" name="defaultsinauid" class="pc" value="{$sinauser['sina_uid']}" style="margin-left:10px" <!--{if $_G['sina_bind_user_settings']['defaultsinauid'] == $sinauser['sina_uid']}-->checked<!--{/if}-->><label for="defaultsinauid{$sinauser['sina_uid']}">{$sinauser['profile']['screen_name']}</label>
+					<!--{/loop}-->
+				</td>
+			</tr>
+			<!--{/if}-->
+			<tr>
+				<th></th>
+				<td colspan="2">
+					<button type="submit" name="weibosubmit" value="yes" class="pn pnc"><strong>{lang save}</strong></button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<!--{if $_G['sina_admin_settings']['weibofollow']['recomenduids']}-->
+<!--{eval $width = floor(700/6*count($_G['sina_admin_settings']['weibofollow']['recomenduids'])) + 20;}-->
+<script type="text/javascript">document.write('<iframe width="$width" height="239" frameborder="0" scrolling="no" src="http://widget.weibo.com/relationship/bulkfollow.php?language=zh_cn&uids=<!--{eval echo implode(',', $_G['sina_admin_settings']['weibofollow']['recomenduids']);}-->&wide=4&color=C2D9F2,FFFFFF,0082CB,666666&showtitle=1&showinfo=1&sense=0&verified=1&count=6&refer='+encodeURIComponent(location.href)+'&dpc=1"></iframe>')</script>
+<!--{/if}-->
+<!--{/if}-->
